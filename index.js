@@ -10,7 +10,7 @@ mongoose.connect('mongodb+srv://jihyun:4858496z@boilerplate.bc8rq.mongodb.net/my
     // useUnifiedTopology: true, 
     // useCreateIndex: true, 
     // useFindAndModify: false,
-    // 위에 주석들이 왜 안가져와지는지 찾아보기.asdasd
+    //  Mongoose 6.0부터는 위의 옵션을 굳이 안적어도 알아서 적용이 된다. 그러므로 없어도 되는 코드
 }).then(() => console.log('MongoDB Connected...')).catch(
     err => console.log(err))
 
