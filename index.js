@@ -10,7 +10,7 @@ mongoose.connect('mongodb+srv://jihyun:4858496z@boilerplate.bc8rq.mongodb.net/my
     // useUnifiedTopology: true, 
     // useCreateIndex: true, 
     // useFindAndModify: false,
-    // 위에 주석들이 왜 안가져와지는지 찾아보기.
+    // 위에 주석들이 왜 안가져와지는지 찾아보기.asdasd
 }).then(() => console.log('MongoDB Connected...')).catch(
     err => console.log(err))
 
