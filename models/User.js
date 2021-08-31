@@ -1,4 +1,7 @@
 const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
+
 
 const userSchema = mongoose.Schema({
     name: {
@@ -29,6 +32,26 @@ const userSchema = mongoose.Schema({
     tokenExp : { // token 유효기간
         type: Number
     }
+})
+
+//mongoose메소드? 인데 ()안에있는 save를 하기전에 무엇을 먼저 한다는 뜻.
+userSchema.pre('save', function( next ){
+    var user = this; //위에 있는 userSchema를 가르킨다.
+    
+    if(user.isModified('password')){ //비밀번호에 변화가 있다면
+        //비밀번호 암호화.
+        bcrypt.genSalt(saltRounds, function(err, salt) {
+            if(err) return next(err);
+
+            bcrypt.hash(user.password, salt, function(err, hash){
+                if(err) return next(err);
+
+                user.password = hash;
+                next()
+            })
+        })
+    }
+    
 })
 
 const User = mongoose.model('User', userSchema) // model로 schema를 감싸준다.
