@@ -3,3 +3,5 @@
 1. `npm install nodemon --save-dev`를 사용하면 소스코드가 바뀌는 부분이 있을 때 굳이 node server를 끄고 켜고 할 필요없이 바뀐 코드로 리프레쉬 된다.
 
 2. `process.env.NODE_ENV`를 사용하면 서버의 configuration을 할 수 있다!
+
+3. `npm install bcrypt --save`를 사용하면 비밀번호를 암호화 할 수 있다.
