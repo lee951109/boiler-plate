@@ -2,17 +2,19 @@
 const express = require('express') //express 모듈을 가져온다.
 const app = express()
 const port = 5000 
-
+const cookieParser = require('cookie-parser');
 const config = require('./config/key');
 
 const { User } = require('./models/User');
+
+
 
 //post 요청시 body 데이터값을 읽을 수 있는 구문으로 파싱해준다.
 //application/x-www-form-urlencoded
 app.use(express.urlencoded({extended: true}));
 //application/json
 app.use(express.json());
-
+app.use(cookieParser());
 
 //mongodb 연결
 const mongoose = require('mongoose')
@@ -42,8 +44,34 @@ app.post('/register', (req, res) => {
     if(err) return res.json({ success: false, err})
     return res.status(200).json({ success: true }) //status가 200이면 성공
   })
+})
 
+app.post('/login', (req, res) => {
+  //요청된 이메일을 DB에서 찾는다.
+  User.findOne({ email: req.body.email }, (err, user) =>{
+    if(!user){
+      return res.json({
+        loginSuccess : false,
+        message: "제공된 이메일에 해당하는 유저가 없습니다."
+      })
+    }
 
+    //요청된 이메일이 DB에 있다면 비밀번호가 맞는 비밀번호인지 체크
+    user.comparePassword( req.body.password, (err, isMatch ) => {
+      if(!isMatch) return res.json({ loginSuccess : false, message: "비밀번호가 틀렸습니다."})
+
+      // 비밀번호가 맞다면 token 생성
+      user.makeToken((err, user) => {
+        if(err) return res.status(400).send(err);
+        
+        //토큰을 저장
+        res.cookie("x_auth", user.token)
+          .status(200)
+          .json({ loginSuccess : true, userId : user.id })
+
+      })
+    })
+  })
 })
 
 
